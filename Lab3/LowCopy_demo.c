@@ -33,7 +33,7 @@ int main(int argc, char *argv[]) {
   while((nread = read(in, block, sizeof(block))) > 0 ) {
     if(write(out, block, nread) != nread)
       fprintf(stderr, "error : Write");
-    usleep(100);
+    usleep(10000);
     printf(".");    
     fflush(stdout);
   }
