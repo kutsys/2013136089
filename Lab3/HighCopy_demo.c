@@ -28,7 +28,7 @@ int main(int argc, char *argv[]){
   
   while((nread = fread(block, sizeof(char), sizeof(block), in)) > 0){
     fwrite(block, sizeof(char), nread, out);
-    sleep(1);
+    usleep(100);
     printf(".");
   }
   printf("\n");
