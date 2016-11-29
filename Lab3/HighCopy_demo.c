@@ -33,8 +33,9 @@ int main(int argc, char *argv[]){
   
   while((nread = fread(block, sizeof(char), sizeof(block), in)) > 0){
     fwrite(block, sizeof(char), nread, out);
-    usleep(100);
+    usleep(10000);
     printf(".");
+    fflush(stdout);
   }
   printf("\n");
   fclose(in);
