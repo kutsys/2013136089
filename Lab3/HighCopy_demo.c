@@ -7,9 +7,8 @@
 #include <time.h>
 
 int main(int argc, char *argv[]){
-	char block[1024];
+  char block[1024];
   int nread;
-  char i_name[52], o_name[52];
   FILE *in, *out;
     
   if(argc != 3) { //인자의 수가 조건에 맞지 않을 경우
@@ -22,9 +21,15 @@ int main(int argc, char *argv[]){
     exit(1);
   }
   
-  strcpy(i_name, argv[1]);
-  strcpy(o_name, argv[2]);
- 
+  if((in = fopen(argv[1], "r")) == NULL) {
+    fprintf(stderr, "error : input file open error\n");
+    exit(1);
+  }
+  
+  if((out = fopen(argv[2], "w")) == NULL) {
+    fprintf(stderr, "error : output file open error\n");
+    exit(1);
+  }
   
   while((nread = fread(block, sizeof(char), sizeof(block), in)) > 0){
     fwrite(block, sizeof(char), nread, out);
