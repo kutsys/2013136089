@@ -35,6 +35,7 @@ int main(int argc, char *argv[]) {
       fprintf(stderr, "error : Write");
     usleep(100);
     printf(".");    
+    fflush(stdout);
   }
   close(in);
   close(out);
