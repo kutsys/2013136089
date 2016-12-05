@@ -4,14 +4,15 @@
 #include <stdlib.h>
 #include <string.h>
 #include <fcntl.h>
-#include <time.h>
 
-int main(int argc, char *argv[]){
+int main(int argc, char *argv[]) {
   char block[1024];
+  int in, out;
+  char c;
   int nread;
-  FILE *in, *out;
+  char i_name[52], o_name[52];
   int dot = 0;
-    
+  
   if(argc != 3) { //인자의 수가 조건에 맞지 않을 경우
     fprintf(stderr, "error : put [input filename] [output filename]\n");
     exit(1);
@@ -22,20 +23,23 @@ int main(int argc, char *argv[]){
     exit(1);
   }
  
-  in = fopen(argv[1], "r");
-  out = fopen(argv[2], "w");
-
-  while((nread = fread(block, sizeof(char), sizeof(block), in)) > 0){
-    fwrite(block, sizeof(char), nread, out);
+  strcpy(i_name, argv[1]);
+  strcpy(o_name, argv[2]);
+ 
+  in = open(i_name, O_RDONLY);
+  out = open(o_name, O_WRONLY|O_CREAT, S_IRUSR|S_IWUSR);
+  
+  while((nread = read(in, block, sizeof(block))) > 0 ) {
+    write(out, block, nread);
     ++dot;
     if(dot%100 == 0) {
 	printf(".");
 	usleep(10000);
-    }  
+    }     
     fflush(stdout);
   }
   printf("\n");
-  fclose(in);
-  fclose(out);
+  close(in);
+  close(out);
   exit(0);
 }
