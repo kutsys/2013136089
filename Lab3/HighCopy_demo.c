@@ -21,16 +21,7 @@ int main(int argc, char *argv[]){
     exit(1);
   }
   
-  if((in = fopen(argv[1], "r")) == NULL) {
-    fprintf(stderr, "error : input file open error\n");
-    exit(1);
-  }
-  
-  if((out = fopen(argv[2], "w")) == NULL) {
-    fprintf(stderr, "error : output file open error\n");
-    exit(1);
-  }
-  
+
   while((nread = fread(block, sizeof(char), sizeof(block), in)) > 0){
     fwrite(block, sizeof(char), nread, out);
     usleep(10000);
