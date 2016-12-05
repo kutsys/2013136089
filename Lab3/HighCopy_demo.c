@@ -10,6 +10,7 @@ int main(int argc, char *argv[]){
   char block[1024];
   int nread;
   FILE *in, *out;
+  int dot = 0;
     
   if(argc != 3) { //인자의 수가 조건에 맞지 않을 경우
     fprintf(stderr, "error : put [input filename] [output filename]\n");
@@ -20,16 +21,21 @@ int main(int argc, char *argv[]){
     fprintf(stderr, "error : filename should not be over 100 byte\n");
     exit(1);
   }
+ 
   in = fopen(argv[1], "r");
   out = fopen(argv[2], "w");
 
   while((nread = fread(block, sizeof(char), sizeof(block), in)) > 0){
     fwrite(block, sizeof(char), nread, out);
-    usleep(10000);
-    printf(".");
+    ++dot;
+    if(dot%100 == 0) {
+	printf(".");
+	usleep(10000);
+    }  
     fflush(stdout);
   }
   printf("\n");
   fclose(in);
   fclose(out);
+  exit(0);
 }
