@@ -4,7 +4,9 @@
 #include <stdlib.h>
 #include <string.h>
 #include <signal.h>
-#include "myshm.h"
+#define MYSHM_KEY 0225
+#define MYSHM_SIZE 64
+
 
 char* shm = NULL;
 void shm_free(int sig) {
