@@ -3,7 +3,9 @@
 #include <sys/shm.h>
 #include <stdlib.h>
 #include <string.h>
-#include "myshm.h"
+#define MYSHM_KEY 0225
+#define MYSHM_SIZE 64
+
 
 char* shm = NULL;
 int main(int argc, char* argv[]) {
