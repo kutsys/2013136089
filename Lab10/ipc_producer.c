@@ -6,7 +6,8 @@
 #include <limits.h>
 #include <string.h>
 #include <fcntl.h>
-#include "myfifo.h"
+#define PRODUCER_FIFO "/tmp/prdc_fifo"
+#define CONSUMER_FIFO "/tmp/csm_fifo"
 
 int main(int argc, char* argv[]) {
 	const char studentId[PIPE_BUF+1] = "2013136089";
