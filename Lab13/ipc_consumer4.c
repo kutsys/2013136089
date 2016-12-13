@@ -5,7 +5,8 @@
 #include <sys/un.h>
 #include <stdlib.h>
 #include <string.h>
-#include "mysock.h"
+#define MYSOCK_PATH "/tmp/mysocket_path"
+#define MYSOCK_BUF_SIZE 64
 
 int main(int argc, char* argv[]) {
 	const char* studentName = "Areum Lee";
