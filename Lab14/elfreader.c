@@ -45,6 +45,7 @@ char temp[SIZE];
 	case 2:
 		sprintf(temp,"readelf -h %s",argv[1]);	
 		checkFile(argv[1]);
+		system(temp);
 		break;
 	case 3:
 		checkFile(argv[2]);
