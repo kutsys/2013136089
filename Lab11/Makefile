@@ -8,5 +8,3 @@ ipc_consumer : ipc_consumer.c
 
 clean :
 	rm ipc_producer2 ipc_consumer2
-Contact GitHub API Training Shop Blog About
-© 2016 GitHub, Inc. Terms Privacy Security Status Help
