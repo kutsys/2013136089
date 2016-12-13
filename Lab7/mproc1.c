@@ -8,7 +8,7 @@
 #define EXECTO 10
 pid_t childPid[EXECTO];
 void killChild(int sig) {
-	printf("Terminated.\n");
+	printf("Terminated\n");
 	for(int i=0; i<EXECTO; ++i)
 		kill(childPid[i], SIGTERM);
 	exit(0);
@@ -32,6 +32,6 @@ int main(int argc, char* argv[]) {
 	int state_val;
 	for(int p=0; p<EXECTO; ++p)
 		wait(&state_val);
-	printf("Finished (process)\n");
+	printf("Finished\n");
 	exit(0);
 }
