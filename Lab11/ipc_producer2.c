@@ -3,53 +3,71 @@
 #include <sys/shm.h>
 #include <stdlib.h>
 #include <string.h>
-#define MYSHM_KEY 0225
-#define MYSHM_SIZE 64
 
+#define KEYVAL 0627
+#define MEMSIZE 64
+#define FFLAG 0
+#define PFLAG 1
+#define CFLAG 2
 
 char* shm = NULL;
+
 int main(int argc, char* argv[]) {
-	const char* studentId = "2013136089";
+	const char* studentId = "2013136100";
 	char myPid[16];	
+	char consumerPid[MEMSIZE], studentName[MEMSIZE];
 	sprintf(myPid, "%d", getpid());
-	char consumerPid[MYSHM_SIZE], studentName[MYSHM_SIZE];
-	int shmid = shmget(MYSHM_KEY, MYSHM_SIZE, 0666 | IPC_CREAT);
+
+	//request new shared memory space
+	//IPC_CREAT : Create new shared memory if key value is new
+	int shmid = shmget(KEYVAL, MEMSIZE, 0666 | IPC_CREAT);
 	if(shmid==-1) {
 		perror("shmget failed\n");
 		exit(EXIT_FAILURE);
 	}
+
+	//attach process memory to shared memory
 	shm = shmat(shmid, NULL, 0);
 	if(shm == (char*)(-1)) {
 		perror("shmat failed\n");
 		exit(EXIT_FAILURE);
 	}
+
 	char cmdBuf[1024];
 	while(1) {
 		scanf("%s", cmdBuf);
 		if(strcmp(cmdBuf, "start")==0) {
-			// write 1.myPid 2.studentId 
+			//Write code///////////////////////////////////////////////////////////
+			//write myPid into shared memory
 			strcpy(shm+1, myPid);
-			shm[0] = PRODUCER_WRITED;
-			while(shm[0]!=ANYONE_WRITED)
+			//put producer into suspended state, allowing consumer to read new value
+			shm[0] = PFLAG;
+			while(shm[0]!=FFLAG)
 				sleep(0);
+			//write studentId into shared memory
 			strcpy(shm+1, studentId);
-			shm[0] = PRODUCER_WRITED;
+			//put producer into suspended state, allowing consumer to read new value
+			shm[0] = PFLAG;
 
-			// read 1.consumerPid 2.studentName
-			while(shm[0]!=CONSUMER_WRITED)
+			//Read code///////////////////////////////////////////////////////////
+			//wait till memory access is freed
+			while(shm[0]!=CFLAG)
 				sleep(0);
-			strncpy(consumerPid, shm+1, MYSHM_SIZE-1);
-			shm[0] = ANYONE_WRITED;
-			while(shm[0]!=CONSUMER_WRITED)
+			//read consumerPid from shared memory
+			strncpy(consumerPid, shm+1, MEMSIZE-1);
+			//consumer will write new value to shared memory	
+			shm[0] = FFLAG;
+			//wait till memory access is freed
+			while(shm[0]!=CFLAG)
 				sleep(0);
-			strncpy(studentName, shm+1, MYSHM_SIZE-1);
-			shm[0] = ANYONE_WRITED;
-			printf("producer2_pid:%s, consumer2_pid:%s, student_id:%s, student_name:%s\n", myPid, consumerPid, studentId, studentName);
-		}
-		if(strcmp(cmdBuf, "exit")==0) {
-			printf("exit program...\n");
-			exit(EXIT_SUCCESS);
+			//read studentName from shared memory
+			strncpy(studentName, shm+1, MEMSIZE-1);
+			//memory freed. consumer will resume whole operation
+			shm[0] = FFLAG;
+
+			//print gathered data
+			printf("Producer PID: %s \nConsumer PID: %s \nStudent ID: %s \nStudent Name: %s\n", myPid, consumerPid, studentId, studentName);
 		}
 	}
-	exit(EXIT_FAILURE);
+	exit(EXIT_SUCCESS);
 }
