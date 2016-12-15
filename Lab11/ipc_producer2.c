@@ -13,7 +13,7 @@
 char* shm = NULL;
 
 int main(int argc, char* argv[]) {
-	const char* studentId = "2013136100";
+	const char* studentId = "2013136089";
 	char myPid[16];	
 	char consumerPid[MEMSIZE], studentName[MEMSIZE];
 	sprintf(myPid, "%d", getpid());
